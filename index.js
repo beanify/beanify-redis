@@ -15,6 +15,7 @@ module.exports = beanifyPlugin((beanify, options, next) => {
   }
 
   let client = options.client || null
+  delete options.serializedObject
 
   if (namespace) {
     if (!beanify.redis) {
