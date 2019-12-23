@@ -127,7 +127,6 @@ beanify.ready(() => {
     }, err => {
       t.error(err)
     })
-    
   })
 
   tap.test('这是一个关于Redis list类型的(llen)测试', (t) => {
@@ -149,7 +148,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })

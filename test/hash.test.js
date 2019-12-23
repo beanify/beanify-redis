@@ -20,7 +20,7 @@ beanify.register(require('../index'), {
   db: 0
 })
 
-function init(redis){
+function init (redis) {
   redis.del('hash')
   redis.hset('hash', 'test1', 2)
   redis.hset('hash', 'integer', 200)
@@ -69,7 +69,7 @@ beanify.ready(() => {
 
   tap.test('这是一个关于Redis hash类型的(hmset)测试', (t) => {
     t.plan(1)
-    redis.hmset('hash', {name: 'name',pass: 'password'}).then(res => {
+    redis.hmset('hash', { name: 'name', pass: 'password' }).then(res => {
       t.equal(res, 'OK', 'check 这是一个关于Redis hash类型的(hmset)测试')
     }, err => {
       t.error(err)
@@ -140,7 +140,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })

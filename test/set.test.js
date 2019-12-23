@@ -78,7 +78,7 @@ beanify.ready(() => {
 
   tap.test('这是一个关于Redis set类型的(smove)测试', (t) => {
     t.plan(1)
-    redis.smove('set', 'new_set',  { name: 'name', value: 'value' }).then(res => {
+    redis.smove('set', 'new_set', { name: 'name', value: 'value' }).then(res => {
       t.equal(res, 1, 'check 这是一个关于Redis set类型的(smove)测试')
     }, err => {
       t.error(err)
@@ -160,5 +160,5 @@ beanify.ready(() => {
   tap.tearDown(() => {
     console.log('tap.tearDown')
     beanify.close()
-  })  
+  })
 })

@@ -7,10 +7,12 @@ module.exports = beanifyPlugin((beanify, options, next) => {
   delete options.namespace
 
   if (options.serializedObject) {
-    Object.prototype.toString = function () {
+    Object.prototype.toString = function () { // eslint-disable-line
       try {
         return JSON.stringify(this)
-      } catch{ }
+      } catch {
+        return this
+      }
     }
   }
 

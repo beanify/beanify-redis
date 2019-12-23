@@ -32,7 +32,7 @@ beanify.register(require('../index'), {
 beanify.ready(() => {
   console.log('beanify ready....')
 
-  const {redis1, redis2} = beanify.redis
+  const { redis1, redis2 } = beanify.redis
   redis1.del('string')
 
   tap.test('这是一个关于Redis string类型的(set)测试', (t) => {
@@ -135,7 +135,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })

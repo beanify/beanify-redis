@@ -20,7 +20,7 @@ beanify.register(require('../index'), {
   db: 0
 })
 
-function init(redis) {
+function init (redis) {
   redis.del('zset')
   redis.del('zset1')
   redis.zadd('zset', 2, 'test')
@@ -55,7 +55,7 @@ beanify.ready(() => {
 
   tap.test('这是一个关于Redis zset类型的(zrange)测试', (t) => {
     t.plan(2)
-    redis.zrange('zset', 0, 3, function(err, res){
+    redis.zrange('zset', 0, 3, function (err, res) {
       t.equal(res.length, 4, 'check 这是一个关于Redis set类型的(zrange)测试')
       t.error(err)
     })
@@ -90,7 +90,7 @@ beanify.ready(() => {
 
   tap.test('这是一个关于Redis zset类型的(zincrby)测试', (t) => {
     t.plan(2)
-    redis.zincrby('zset', 2, 'hello word', function(err, res){
+    redis.zincrby('zset', 2, 'hello word', function (err, res) {
       t.equal(res, '7', 'check 这是一个关于Redis set类型的(zincrby)测试')
       t.error(err)
     })
@@ -197,7 +197,7 @@ beanify.ready(() => {
 
   tap.test('这是一个关于Redis zset类型的(zrevrange)测试', (t) => {
     t.plan(2)
-    redis.zrevrange('zset', 0, 3, function(err, res){
+    redis.zrevrange('zset', 0, 3, function (err, res) {
       t.equal(res.length, 4, 'check 这是一个关于Redis set类型的(zrevrange)测试')
       t.error(err)
     })
@@ -213,7 +213,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })

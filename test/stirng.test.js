@@ -127,7 +127,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })

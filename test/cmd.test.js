@@ -20,7 +20,7 @@ beanify.register(require('../index'), {
   db: 0
 })
 
-function init(redis) {
+function init (redis) {
   redis.del('test')
   redis.set('test', 'value')
 }
@@ -69,7 +69,6 @@ beanify.ready(() => {
       t.error(err)
     })
   })
-
 
   tap.test('这是一个关于Redis 命令的(expireat)测试', (t) => {
     init(redis)
@@ -156,7 +155,7 @@ beanify.ready(() => {
   })
 
   tap.tearDown(() => {
-    console.log("tap.tearDown")
+    console.log('tap.tearDown')
     beanify.close()
   })
 })
