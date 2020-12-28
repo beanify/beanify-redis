@@ -2,82 +2,46 @@
 
 const beanifyPlugin = require('beanify-plugin')
 const Redis = require('ioredis')
-module.exports = beanifyPlugin((beanify, options, next) => {
-  const namespace = options.namespace
-  delete options.namespace
 
-  if (options.serializedObject) {
-    Object.prototype.toString = function () { // eslint-disable-line
-      try {
-        return JSON.stringify(this)
-      } catch {
-        return this
-      }
-    }
-  }
-
+module.exports = beanifyPlugin(async (beanify, options, next) => {
   let client = options.client || null
-  delete options.serializedObject
 
-  if (namespace) {
-    if (!beanify.redis) {
-      beanify.decorate('redis', {})
-    }
+  if (beanify.hasDecorator('redis')) {
+    return next(new Error('beanify-redis has already been registered'))
+  }
+  beanify.decorate('redis', {})
 
-    if (beanify.redis[namespace]) {
-      return next(new Error(`Redis '${namespace}' instance namespace has already been registered`))
-    }
-
-    const closeNamedInstance = (ctx, done) => {
-      console.log('Redis connection closed!')
-      beanify.redis[namespace].quit(done)
-    }
-
-    if (!client) {
-      try {
-        client = new Redis(options)
-      } catch (err) {
-        return next(err)
-      }
-
-      client.connect(() => {
-        console.log('Redis connection!')
-      })
-
-      beanify.addHook('onClose', closeNamedInstance)
-    }
-
-    beanify.redis[namespace] = client
-  } else {
-    if (beanify.redis) {
-      return next(new Error('fastify-redis has already been registered'))
-    } else {
-      if (!client) {
-        try {
-          client = new Redis(options)
-        } catch (err) {
-          return next(err)
+  if (!client) {
+    const urls = options.urls ? options.urls.split(';') : []
+    for (let url of urls) {
+      const namespace = `db${url.substr(url.lastIndexOf('/') + 1)}` || 'db0'
+      if (url) {
+        if (beanify.redis[namespace]) {
+          return next(new Error(`Redis '${namespace}' instance namespace has already been registered`))
         }
-        beanify.addHook('onClose', (ctx, done) => {
-          console.log('Redis connection closed!')
-          client.quit(done)
-        })
-
-        client.connect(() => {
-          console.log('Redis connection!')
-        })
+        try {
+          const client = new Redis(url, options.redis || {})
+          await client.connect()
+          beanify.redis[namespace] = client
+          beanify.$log.info(`Redis ${namespace} connection!`)
+          beanify.addHook('onClose', function() {
+            beanify.$log.info(`Redis ${namespace} connection closed!`)
+            return client.quit()
+          })
+        } catch (error) {
+          throw error
+        }
       }
-
-      beanify.decorate('redis', client)
+    }
+  } else {
+    if (options.namespace) {
+      beanify.redis[namespace] = client
+    } else {
+      beanify.redis = client
     }
   }
-
+  beanify.$log.info('redis ready....')
   next()
 }, {
-  beanify: '>=1.0.11',
-  name: require('./package.json').name,
-  options: {
-    serializedObject: false,
-    host: '127.0.0.1'
-  }
+  urls: 'redis://127.0.0.1:6379/0'
 })
