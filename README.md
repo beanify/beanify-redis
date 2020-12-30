@@ -22,7 +22,7 @@ const redis = require('beanify-redis')
 const beanify = Beanify({})
 
 beanify
-  .register(Env, {
+  .register(redis, {
     client: 'redis test',
     namespace: 'db0'
   })
