@@ -1,11 +1,12 @@
-import IORedis from 'ioredis'
+import { Redis, RedisOptions } from 'ioredis'
 import { Beanify, PluginOptions, PluginDoneCallback } from 'beanify'
 
+// @ts-ignore
 export class BeanifyRedisOptions extends PluginOptions {
   namespace: string
   urls: string | [string]
-  client: IORedis.Redis
-  redis: IORedis.RedisOptions
+  client: Redis
+  redis: RedisOptions
 }
 
 export type BeanifyRedis = (
